@@ -99,8 +99,8 @@ pause
 
 run_cmd mkfs.ext4 -L ARCH_BOOT /dev/vda2
 run_cmd mount /dev/vda2 /mnt/boot
-run_cmd mkdir -p /mnt/boot/efi
-run_cmd mount /dev/vda1 /mnt/boot/efi
+# run_cmd mkdir -p /mnt/boot/efi
+# run_cmd mount /dev/vda1 /mnt/boot/efi
 
 # ============================================
 # VERIFY MOUNTS
@@ -142,7 +142,7 @@ print_header "STEP 8: INSTALLING BASE SYSTEM"
 echo "Installing: base, kernels, firmware, and essential packages"
 pause
 
-run_cmd pacstrap -K /mnt base linux linux-lts linux-firmware btrfs-progs cryptsetup \
+run_cmd pacstrap -K /mnt base linux linux-lts linux-firmware btrfs-progs cryptsetup grub \
     intel-ucode networkmanager pipewire pipewire-pulse pipewire-alsa \
     bluez bluez-utils vim nano angelfish
 
@@ -218,8 +218,11 @@ print_header "SETTING ROOT PASSWORD"
 passwd
 
 # SYSTEMD-BOOT
-print_header "INSTALLING SYSTEMD-BOOT"
-run_cmd bootctl install
+print_header "INSTALLING GRUB"
+# run_cmd bootctl install
+run_cmd grub-install --target=i386-pc /dev/vda
+run_cmd grub-mkconfig -o /boot/grub/grub.cfg
+
 
 # BOOTLOADER CONFIG
 print_header "CONFIGURING BOOTLOADER"
