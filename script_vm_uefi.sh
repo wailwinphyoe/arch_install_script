@@ -31,8 +31,8 @@ pause() {
 # ============================================
 print_header "STEP 1: MANUAL PARTITIONING"
 echo "Use cfdisk to create:"
-echo "  - vda1: 1GB (for /boot)"
-echo "  - vda2: ~89GB (for encrypted root)"
+echo "  - vda2: 1GB (for /boot)"
+echo "  - vda3: ~89GB (for encrypted root)"
 echo ""
 read -p "Have you completed partitioning? (y/n): " answer
 if [[ $answer != "y" ]]; then
@@ -44,11 +44,11 @@ fi
 # ENCRYPTION
 # ============================================
 print_header "STEP 2: SETTING UP ENCRYPTION"
-echo "This will encrypt vda2 with LUKS2"
+echo "This will encrypt vda3 with LUKS2"
 pause
 
-run_cmd cryptsetup luksFormat --type luks2 /dev/vda2
-run_cmd cryptsetup open /dev/vda2 cryptroot
+run_cmd cryptsetup luksFormat --type luks2 /dev/vda3
+run_cmd cryptsetup open /dev/vda3 cryptroot
 
 # ============================================
 # FILESYSTEM CREATION
@@ -97,10 +97,10 @@ run_cmd mount -o subvol=@libvirt,compress=zstd:3,noatime /dev/mapper/cryptroot /
 print_header "STEP 6: SETTING UP BOOT PARTITIONS"
 pause
 
-run_cmd mkfs.ext4 -L ARCH_BOOT /dev/vda1
-run_cmd mount /dev/vda1 /mnt/boot
-# run_cmd mkdir -p /mnt/boot/efi
-# run_cmd mount /dev/vda1 /mnt/boot/efi
+run_cmd mkfs.ext4 -L ARCH_BOOT /dev/vda2
+run_cmd mount /dev/vda2 /mnt/boot
+run_cmd mkdir -p /mnt/boot/efi
+run_cmd mount /dev/vda1 /mnt/boot/efi
 
 # ============================================
 # VERIFY MOUNTS
@@ -142,7 +142,7 @@ print_header "STEP 8: INSTALLING BASE SYSTEM"
 echo "Installing: base, kernels, firmware, and essential packages"
 pause
 
-run_cmd pacstrap -K /mnt base linux linux-lts linux-firmware btrfs-progs cryptsetup grub \
+run_cmd pacstrap -K /mnt base linux linux-lts linux-firmware btrfs-progs cryptsetup \
     intel-ucode networkmanager pipewire pipewire-pulse pipewire-alsa \
     bluez bluez-utils vim nano angelfish
 
@@ -218,11 +218,8 @@ print_header "SETTING ROOT PASSWORD"
 passwd
 
 # SYSTEMD-BOOT
-print_header "INSTALLING GRUB"
-# run_cmd bootctl install
-run_cmd grub-install --target=i386-pc /dev/vda
-run_cmd grub-mkconfig -o /boot/grub/grub.cfg
-
+print_header "INSTALLING SYSTEMD-BOOT"
+run_cmd bootctl install
 
 # BOOTLOADER CONFIG
 print_header "CONFIGURING BOOTLOADER"
@@ -237,7 +234,7 @@ cat /boot/loader/loader.conf
 
 # GET UUID
 print_header "GETTING UUID FOR BOOT ENTRIES"
-UUID=$(blkid -s UUID -o value /dev/vda2)
+UUID=$(blkid -s UUID -o value /dev/vda3)
 echo "UUID: $UUID"
 
 # BOOT ENTRIES
