@@ -118,23 +118,23 @@ echo "Setting up Singapore mirrors..."
 pause
 
 cat > /etc/pacman.d/mirrorlist << 'EOF'
-Server = "http://sg.mirrors.cicku.me/archlinux/$repo/os/$arch",
-Server = "https://sg.mirrors.cicku.me/archlinux/$repo/os/$arch",
-Server = "http://mirror.aktkn.sg/archlinux/$repo/os/$arch",
-Server = "https://mirror.aktkn.sg/archlinux/$repo/os/$arch",
-Server = "http://mirror.guillaumea.fr/archlinux/$repo/os/$arch",
-Server = "https://mirror.guillaumea.fr/archlinux/$repo/os/$arch",
-Server = "http://mirror.jingk.ai/archlinux/$repo/os/$arch",
-Server = "https://mirror.jingk.ai/archlinux/$repo/os/$arch",
-Server = "http://ossmirror.mycloud.services/os/linux/archlinux/$repo/os/$arch",
-Server = "http://mirror.sg.gs/archlinux/$repo/os/$arch",
-Server = "https://mirror.sg.gs/archlinux/$repo/os/$arch",
-Server = "https://singapore.mirror.pkgbuild.com/$repo/os/$arch",
-Server = "https://sg.arch.niranjan.co/$repo/os/$arch",
-Server = "http://mirror.freedif.org/archlinux/$repo/os/$arch",
-Server = "https://mirror.freedif.org/archlinux/$repo/os/$arch",
-Server = "http://mirror.sg.cdn-perfprod.com/archlinux/$repo/os/$arch",
-Server = "https://mirror.sg.cdn-perfprod.com/archlinux/$repo/os/$arch"
+Server = http://sg.mirrors.cicku.me/archlinux/$repo/os/$arch
+Server = https://sg.mirrors.cicku.me/archlinux/$repo/os/$arch
+Server = http://mirror.aktkn.sg/archlinux/$repo/os/$arch
+Server = https://mirror.aktkn.sg/archlinux/$repo/os/$arch
+Server = http://mirror.guillaumea.fr/archlinux/$repo/os/$arch
+Server = https://mirror.guillaumea.fr/archlinux/$repo/os/$arch
+Server = http://mirror.jingk.ai/archlinux/$repo/os/$arch
+Server = https://mirror.jingk.ai/archlinux/$repo/os/$arch
+Server = http://ossmirror.mycloud.services/os/linux/archlinux/$repo/os/$arch
+Server = http://mirror.sg.gs/archlinux/$repo/os/$arch
+Server = https://mirror.sg.gs/archlinux/$repo/os/$arch
+Server = https://singapore.mirror.pkgbuild.com/$repo/os/$arch
+Server = https://sg.arch.niranjan.co/$repo/os/$arch
+Server = http://mirror.freedif.org/archlinux/$repo/os/$arch
+Server = https://mirror.freedif.org/archlinux/$repo/os/$arch
+Server = http://mirror.sg.cdn-perfprod.com/archlinux/$repo/os/$arch
+Server = https://mirror.sg.cdn-perfprod.com/archlinux/$repo/os/$arch
 EOF
 
 run_cmd cat /etc/pacman.d/mirrorlist
